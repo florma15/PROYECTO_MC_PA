@@ -3,42 +3,40 @@
   <td>{{ loop.index }}</td>
   <td>{{ empleado.nombre_empleado }}</td>
   <td>{{ empleado.apellido_empleado }}</td>
-  <td>{{ empleado.sexo_empleado }}</td>
-  <td>$ {{ '{:,.0f}'.format(empleado.salario_empleado).replace(',', '.')}}</td>
   <td>
-    <a
-      href="/detalles-empleado/{{ empleado.id_empleado }}"
-      title="Ver envio"
-      type="button"
-      class="btn btn-info btn-sm"
-      data-bs-toggle="tooltip"
-      data-bs-offset="0,4"
-      data-bs-placement="top"
-      data-bs-html="true"
-      title="<span>Ver detalles</span>">
-      <i class="bi bi-eye"></i>
-      Ver detalles
-    </a>
-    <a
-      href="{{ url_for('viewEditarEmpleado', id = empleado.id_empleado) }}"
-      class="btn btn-success btn-sm"
-      tooltip="Actualizar Registro">
-      <i class="bi bi-arrow-clockwise"></i>
-      Actualizar
-    </a>
-    <a
-      href="#"
-      onclick="eliminarEmpleado('{{ empleado.id_empleado }}');"
-      class="btn btn-danger btn-sm"
-      data-bs-toggle="tooltip"
-      data-bs-offset="0,4"
-      data-bs-placement="top"
-      data-bs-html="true"
-      title="<span>Eliminar empleado {{ empleado.nombre_empleado }}</span>">
-      <i class="bi bi-trash3"></i>
-      Eliminar
-    </a>
+    {% if empleado.sexo_empleado == "1" %}
+      Masculino
+    {% elif empleado.sexo_empleado == "2" %}
+      Femenino
+    {% else %}
+      Sin especificar
+    {% endif %}
+  </td>
+  <td>$ {{ '{:,.0f}'.format(empleado.salario_empleado).replace(',', '.') }}</td>
+  <td>
+    <div class="btn-group" role="group">
+      <a
+        href="/detalles-empleado/{{ empleado.id_empleado }}"
+        class="btn btn-info btn-sm"
+        data-bs-toggle="tooltip"
+        title="Ver detalles">
+        <i class="bi bi-eye"></i>
+      </a>
+      <a
+        href="{{ url_for('viewEditarEmpleado', id=empleado.id_empleado) }}"
+        class="btn btn-success btn-sm"
+        title="Actualizar">
+        <i class="bi bi-pencil-square"></i>
+      </a>
+      <button
+        onclick="eliminarEmpleado('{{ empleado.id_empleado }}');"
+        class="btn btn-danger btn-sm"
+        data-bs-toggle="tooltip"
+        title="Eliminar empleado {{ empleado.nombre_empleado }}">
+        <i class="bi bi-trash3"></i>
+      </button>
+    </div>
   </td>
 </tr>
-
 {% endfor %}
+
