@@ -1,50 +1,112 @@
+
 {% extends 'public/base_cpanel.html' %}
 
-{% block title %} DCR | Registrar Nuevo Empleado{% endblock %}
+{% block title %} DCR | Registrar Nuevo Empleado {% endblock %}
 
 {% block customCSS %}
-<link
-  rel="stylesheet"
-  href="{{ url_for('static', filename ='assets/css/file.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/file.css') }}" />
+<style>
+  .card {
+    border-radius: 10px !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 900px;
+  }
+
+  h3 {
+    color: #4a4a4a;
+  }
+
+  label {
+    font-weight: bold;
+    color: #555;
+  }
+
+  .form-control, .form-select {
+    border-radius: 5px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 1.1rem;
+  }
+
+  img {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+  }
+
+  .avatar-upload {
+    position: relative;
+    width: 100%;
+    max-width: 150px;
+    margin-top: 15px;
+  }
+
+  .avatar-edit input {
+    display: none;
+  }
+
+  .avatar-edit label {
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    padding: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .avatar-preview {
+    width: 100%;
+    height: 150px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .avatar-preview div {
+    width: 100%;
+    height: 100%;
+  }
+</style>
 {% endblock %}
 
 {% block body %}
-<div class="card" style="border-radius: 0px !important">
+<div class="card">
   {% if respuestaEmpleado|length %}
-  <div class="row justify-content-center mb-2">
+  <div class="row justify-content-center mb-4">
     <div class="col-md-12">
-      <h3 class="text-center mt-5 mb-3">
+      <h3 class="text-center mt-4 mb-3">
         <a href="/lista-de-empleados">
           <i class="bi bi-arrow-left-circle"></i>
         </a>
-        ACTUALIZAR DATOS DEL EMPLEADOS
+        Actualizar Datos del Empleado
       </h3>
       <hr />
     </div>
   </div>
 
-  <div class="row justify-content-center mb-2">
+  <div class="row justify-content-center">
     <div class="col-md-10">
       <form
         class="form-horizontal mx-auto"
         method="POST"
-        action="{{ url_for('actualizarEmpleado', id = respuestaEmpleado.id_empleado ) }}"
+        action="{{ url_for('actualizarEmpleado', id=respuestaEmpleado.id_empleado) }}"
         autocomplete="off"
         enctype="multipart/form-data">
         <input
-          type="text"
-          class="form-control"
+          type="hidden"
           name="id_empleado"
-          value="{{ respuestaEmpleado.id_empleado }}"
-          required
-          hidden />
+          value="{{ respuestaEmpleado.id_empleado }}" />
 
         <div class="card-body">
-          <div class="row">
+          <div class="row mb-3">
             <div class="col-md-6">
-              <label for="nombre_empleado" class="form-label">
-                Nombre del empleado
-              </label>
+              <label for="nombre_empleado" class="form-label">Nombre del empleado</label>
               <input
                 type="text"
                 name="nombre_empleado"
@@ -53,101 +115,81 @@
                 required />
             </div>
             <div class="col-md-6">
-              <label for="apellido_empleado" class="form-label">
-                Apellido del empleado
-              </label>
+              <label for="apellido_empleado" class="form-label">Apellido del empleado</label>
               <input
-                class="form-control"
                 type="text"
                 name="apellido_empleado"
                 value="{{ respuestaEmpleado.apellido_empleado }}"
+                class="form-control"
                 required />
             </div>
           </div>
 
-          <div class="row mt-2">
+          <div class="row mb-3">
             <div class="col-md-6">
-              <label for="sexo_empleado" class="form-label">
-                Sexo del empleado
-              </label>
+              <label for="sexo_empleado" class="form-label">Sexo del empleado</label>
               {% with tipo_sexo = {"1": "Masculino", "2": "Femenino"} %}
-              <select class="form-select" name="sexo_empleado">
-                {% for clave, valor in tipo_sexo.items() %} {% if clave ==
-                respuestaEmpleado.sexo_empleado|string %}
-                <option value="{{ clave }}" selected>{{ valor }}</option>
-                {% else %}
-                <option value="{{ clave }}">{{ valor }}</option>
-                {% endif %} {% endfor %}
+              <select class="form-select" name="sexo_empleado" required>
+                {% for clave, valor in tipo_sexo.items() %}
+                <option value="{{ clave }}" {% if clave == respuestaEmpleado.sexo_empleado|string %}selected{% endif %}>{{ valor }}</option>
+                {% endfor %}
               </select>
               {% endwith %}
             </div>
-
             <div class="col-md-6">
-              <label for="telefono_empleado" class="form-label">
-                Telefono del empleado
-              </label>
+              <label for="telefono_empleado" class="form-label">Teléfono del empleado</label>
               <input
-                class="form-control"
                 type="text"
                 name="telefono_empleado"
                 value="{{ respuestaEmpleado.telefono_empleado }}"
+                class="form-control"
                 required />
             </div>
           </div>
 
-          <div class="row mt-2">
+          <div class="row mb-3">
             <div class="col-md-6">
-              <label for="email_empleado" class="form-label">
-                Email del empleado
-              </label>
+              <label for="email_empleado" class="form-label">Email del empleado</label>
               <input
-                class="form-control"
                 type="email"
                 name="email_empleado"
                 value="{{ respuestaEmpleado.email_empleado }}"
+                class="form-control"
                 required />
             </div>
             <div class="col-md-6">
-              <label for="profesion_empleado" class="form-label">
-                Profesión del empleado
-              </label>
+              <label for="profesion_empleado" class="form-label">Profesión del empleado</label>
               <input
-                class="form-control"
                 type="text"
                 name="profesion_empleado"
                 value="{{ respuestaEmpleado.profesion_empleado }}"
+                class="form-control"
                 required />
             </div>
           </div>
 
-          <div class="row mt-2">
+          <div class="row mb-3">
             <div class="col-md-6">
-              <label for="salario_empleado" class="form-label">
-                Salario del empleado
-              </label>
+              <label for="salario_empleado" class="form-label">Salario del empleado</label>
               <input
-                class="form-control"
                 type="text"
                 name="salario_empleado"
                 value="{{ respuestaEmpleado.salario_empleado }}"
-                id="salario_empleado"
+                class="form-control"
                 required />
             </div>
             <div class="col-md-6">
-              <label for="" class="form-label"> FOTO DEL EMPLEADO </label>
-              <br />
+              <label class="form-label">Foto del empleado</label>
               <img
                 src="/static/fotos_empleados/{{ respuestaEmpleado.foto_empleado }}"
-                style="width: 150px"
+                class="img-thumbnail"
                 alt="{{ respuestaEmpleado.nombre_empleado }}" />
             </div>
           </div>
 
-          <div class="row">
+          <div class="row mb-4">
             <div class="col-md-6">
-              <label for="" class="form-label">
-                ACTUALIZAR LA FOTO DEL EMPLEADO
-              </label>
+              <label class="form-label">Actualizar la foto del empleado</label>
               <div class="avatar-upload">
                 <div class="avatar-edit">
                   <input
@@ -155,23 +197,18 @@
                     name="foto_empleado"
                     id="imageUpload"
                     accept=".png, .jpg, .jpeg" />
-                  <label for="imageUpload"><i class="bi bi-pen"></i></label>
+                  <label for="imageUpload"><i class="bi bi-pencil-fill"></i></label>
                 </div>
                 <div class="avatar-preview">
-                  {% set url_avatar= url_for('static', filename
-                  ='assets/img/avatar.png') %}
-                  <div
-                    id="imagePreview"
-                    style="background-image: url('{{ url_avatar }}')"></div>
+                  <div style="background-image: url('{{ url_for('static', filename='assets/img/avatar.png') }}');"></div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="mb-3 mt-4 text-center">
-            <button type="submit" class="btn rounded-pill btn-primary">
-              Guardar Registro Ahora
-              <i class="bi bi-arrow-clockwise"></i>
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary rounded-pill">
+              Guardar Registro Ahora <i class="bi bi-check-circle"></i>
             </button>
           </div>
         </div>
@@ -179,14 +216,13 @@
     </div>
   </div>
   {% else %}
-  <div class="row justify-content-center mb-2">
-    <div class="col-md-12">
-      <h3 class="text-center">No existe el empleado</h3>
-    </div>
+  <div class="text-center py-5">
+    <h3 class="text-danger">No existe el empleado</h3>
   </div>
-
   {% endif %}
 </div>
-{% endblock %} {% block customJS %}
-<script src="{{ url_for('static', filename ='assets/customJS/file.js') }}"></script>
+{% endblock %}
+
+{% block customJS %}
+<script src="{{ url_for('static', filename='assets/customJS/file.js') }}"></script>
 {% endblock %}
